@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/Dropdown.css">
+  <script src="/static/chat.js" defer></script>
+</head>
+<body>
+    <div class="bg"></div>
+
+    <div id="welcome-screen" class="align">
+      <div class="bgbody">
+      <div class="grid welcome-content">
+        <div class="form login">
+          <div class="form__field">
+            <label for="login__username"><svg class="icon">
+                <use xlink:href="#icon-user"></use>
+              </svg><span class="hidden">Username</span></label>
+            <input autocomplete="username" id="nameInput" type="text" name="username" class="form__input" placeholder="Username" required>
+          </div> 
+          <div class="form__field">
+            <button id="nameSubmit">Enter Chat</button>
+
+          </div>
+        </div>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="icons">
+        <symbol id="icon-user" viewBox="0 0 1792 1792">
+          <path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z" />
+        </symbol>
+      </svg>
+    </div>
+  </div>
+    
+      <h1>Welcome <span id="username-display"></span>!</h1>
+
+  <svg>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+      <feColorMatrix in="blur" type="matrix"
+        values="1 0 0 0 0  
+                0 1 0 0 0  
+                0 0 1 0 0  
+                0 0 0 18 -7" result="goo" />
+      <feBlend in="SourceGraphic" in2="goo" />
+    </filter>
+  </svg>
+
+  <div class="dropdown">
+    <input type="checkbox" id="language-toggle">
+
+    <label class="dropdown__face" for="language-toggle">
+      <div class="dropdown__text" id="current-lang">🌐 Select Language</div>
+      <div class="dropdown__arrow"></div>
+    </label>
+
+    <ul class="dropdown__items" id="language-options">
+      <li data-lang="en">🇺🇸 English</li>
+      <li data-lang="es">🇪🇸 Español</li>
+      <li data-lang="fr">🇫🇷 Français</li>
+      <li data-lang="de">🇩🇪 Deutsch</li>
+      <li data-lang="hi">🇮🇳 हिंदी</li>
+      <li data-lang="ja">🇯🇵 日本語</li>
+    </ul>
+  </div>
+
+
+
+    <div id="chatbox" class="chat">
+      <div class="chat-title"></div>
+      <div class="messages">
+        <div class="messages-content"></div>
+      </div>
+      <div class="message-box">
+        <textarea type="text" class="message-input" id="message" placeholder="Type message..."></textarea>
+        <button type="button" class="message-submit">Send</button>
+      </div>
+    </div>
+</body>
+</html>
