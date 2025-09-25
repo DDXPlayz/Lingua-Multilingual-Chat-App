@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Lingua</title>
+  <link rel="stylesheet" href="/static/login-signup.css">
+  <link rel="stylesheet" href="/static/login-signup.css">
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box login">
+            <form id="login-form">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="text" id="login-username" name="username" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-password" name="password" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p>or login with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google' ></i></a>
+                </div>
+                <p id="login-error" class="error-msg" style="color:red; display:none;"></p>
+            </form>
+        </div>
+        
+
+        <div class="form-box register">
+            <form id="signup-form">
+                <h1>Registration</h1>
+                <div class="input-box">
+                    <input type="text" id="signup-username" name="username" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="signup-email" name="email" placeholder="Email" required>
+                    <i class='bx bxs-envelope' ></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="signup-password" name="password" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <p>or register with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google' ></i></a>
+                </div>
+                <p id="signup-error" class="error-msg" style="color:red; display:none;"></p>
+            </form>
+        </div>
+        
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Hello, Welcome!</h1>
+                <p>Don't have an account?</p>
+                <button class="btn register-btn">Register</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>Welcome Back!</h1>
+                <p>Already have an account?</p>
+                <button class="btn login-btn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
+        
+        // Toggle login / signup forms
+        registerBtn.addEventListener('click', () => {
+            container.classList.add('active');
+        });
+        
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove('active');
+        });
+        
+        // LOGIN FORM
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+        
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+        
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    localStorage.setItem("username", username);
+                    window.location.href = '/chat'; // redirect to chat page
+                } else {
+                    const loginError = document.getElementById('login-error');
+                    loginError.style.display = 'block';
+                    loginError.textContent = data.message || 'Login failed. Try again.';
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server error. Please try again later.');
+            }
+        });
+        
+        // SIGNUP FORM
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('signup-username').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+        
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+        
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    localStorage.setItem("username", username);
+                    window.location.href = '/chat'; // redirect after signup
+                } else {
+                    const signupError = document.getElementById('signup-error');
+                    signupError.style.display = 'block';
+                    signupError.textContent = data.message || 'Signup failed. Try again.';
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server error. Please try again later.');
+            }
+        });
+    </script>
+    
+    
+</body>
+</html>

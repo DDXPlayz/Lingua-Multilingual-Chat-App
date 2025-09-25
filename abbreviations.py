@@ -188,7 +188,7 @@ abbreviations = {
     "wya": "where you at",
     "wyd": "what are you doing",
     "yolo": "you only live once",
-    "yo": "hey",
+    "yo": "hello",
     "yw": "you're welcome",
     "wsg": "what's up"
 }

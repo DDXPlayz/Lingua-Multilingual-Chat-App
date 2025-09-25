@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/Dropdown.css">
+  <script src="/static/chat.js" defer></script>
+</head>
+<body>
+    <div class="bg"></div>
+    
+      <h1>Welcome <span id="username-display"></span>!</h1>
+
+  <svg>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+      <feColorMatrix in="blur" type="matrix"
+        values="1 0 0 0 0  
+                0 1 0 0 0  
+                0 0 1 0 0  
+                0 0 0 18 -7" result="goo" />
+      <feBlend in="SourceGraphic" in2="goo" />
+    </filter>
+  </svg>
+
+  <button class="logoutbtn" id="logout-btn">Logout</button>
+
+  <div class="dropdown">
+    
+    <input type="checkbox" id="language-toggle">
+
+    <label class="dropdown__face" for="language-toggle">
+      <div class="dropdown__text" id="current-lang">🌐 Select Language</div>
+      <div class="dropdown__arrow"></div>
+    </label>
+
+    <ul class="dropdown__items" id="language-options">
+      <li data-lang="en">🇺🇸 English</li>
+      <li data-lang="es">🇪🇸 Español</li>
+      <li data-lang="fr">🇫🇷 Français</li>
+      <li data-lang="de">🇩🇪 Deutsch</li>
+      <li data-lang="hi">🇮🇳 हिंदी</li>
+      <li data-lang="ja">🇯🇵 日本語</li>
+    </ul>
+  </div>
+
+
+
+    <div id="chatbox" class="chat">
+      <div class="chat-title"></div>
+      <div class="messages">
+        <div class="messages-content"></div>
+      </div>
+      <div class="message-box">
+        <textarea type="text" class="message-input" id="message" placeholder="Type message..."></textarea>
+        <button type="button" class="message-submit">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const logoutBtn = document.getElementById('logout-btn');
+  
+      logoutBtn.addEventListener('click', async () => {
+          try {
+              // Clear localStorage
+              localStorage.removeItem("username");
+  
+              // Optionally, clear Flask session on server
+              await fetch('/logout', { method: 'POST' });
+  
+              // Redirect to login/signup page
+              window.location.href = '/';
+          } catch (err) {
+              console.error(err);
+              alert('Error logging out. Try again.');
+          }
+      });
+  </script>
+  
+</body>
+</html>

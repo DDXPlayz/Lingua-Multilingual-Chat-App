@@ -364,75 +364,6 @@ input[type="submit"] {
   flex: 1;
 }
 
-/* modules/login.css */
-
-:root {
-  --loginBorderRadus: 0.5rem;
-  --loginColor: #ffffff;
-
-  --loginInputBackgroundColor: #1e1e2f;
-  --loginInputHoverBackgroundColor: #2a2a3d;
-
-  --loginLabelBackgroundColor: #151522;
-
-  --loginSubmitBackgroundColor: #7f5af0;
-  --loginSubmitColor: #ffffff;
-  --loginSubmitHoverBackgroundColor: #6245df;
-}
-
-
-.login {
-  color: var(--loginColor);
-}
-
-.login label,
-.login input[type="text"],
-.login input[type="password"],
-#nameSubmit {
-  border-radius: var(--loginBorderRadus);
-  padding: 1rem;
-}
-
-.login label {
-  background-color: var(--loginLabelBackgroundColor);
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  padding-inline: 1.25rem;
-}
-
-.login input[type="password"],
-.login input[type="text"] {
-  background-color: var(--loginInputBackgroundColor);
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-}
-
-.login input[type="password"]:focus,
-.login input[type="password"]:hover,
-.login input[type="text"]:focus,
-.login input[type="text"]:hover {
-  background-color: var(--loginInputHoverBackgroundColor);
-}
-
-#nameSubmit {
-  background-color: var(--loginSubmitBackgroundColor);
-  color: var(--loginSubmitColor);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-#nameSubmit:focus,
-#nameSubmit:hover {
-  background-color: var(--loginSubmitHoverBackgroundColor);
-}
-
-p {
-  margin-block: 1.5rem;
-}
-
-.text--center {
-  text-align: center;
-}
 
 /* @media screen and (max-aspect-ratio: 1/1) {
   h1 {
@@ -478,3 +409,33 @@ p {
     padding: 20px 40px;
   }
 } */
+
+.logoutbtn {
+  font-size: 17px;
+  text-decoration: none;
+  padding: 1em 2.5em;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 6em;
+  transition: all 0.2s;
+  border: none;
+  color: black;
+  background-color: white;
+  position: absolute;
+  bottom: 5%;
+  right: 3%;
+  z-index: 10;
+  opacity: 0.8;
+}
+
+.logoutbtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.logoutbtn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
