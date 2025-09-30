@@ -49,17 +49,23 @@ async function loadMessages() {
   data.messages.forEach(msg => {
     const senderClean = msg.from.trim().toLowerCase();
     const isPersonal = senderClean === usernameClean;
-
+  
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("message");
     if (isPersonal) msgDiv.classList.add("message-personal");
     msgDiv.classList.add("new");
-
+  
     const displayName = msg.from.charAt(0).toUpperCase() + msg.from.slice(1);
-    msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
+  
+    if (msg.msg_type === "image") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <br><img src="${msg.content}" alt="Uploaded" class="chat-image">`;
+    } else {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
+    }
+  
     chatbox.appendChild(msgDiv);
   });
-
+  
   const isNearBottom = chatbox.scrollHeight - chatbox.scrollTop <= chatbox.clientHeight + 100;
 
   // Always scroll on first load
@@ -166,5 +172,59 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       sendMessage();
     }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const messagesContent = document.querySelector(".messages-content");
+  const uploadBtn = document.getElementById("upload-btn");
+
+  // Create hidden file input dynamically
+  const imageInput = document.createElement("input");
+  imageInput.type = "file";
+  imageInput.accept = "image/*";
+  imageInput.style.display = "none";
+  document.body.appendChild(imageInput);
+
+  // Trigger file input
+  uploadBtn.addEventListener("click", () => {
+    imageInput.click();
+  });
+
+  // When user selects an image
+  imageInput.addEventListener("change", async () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch("/upload_image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.status === "ok") {
+        const imgUrl = data.url;
+
+        // Display image in chat
+        const msg = document.createElement("div");
+        msg.className = "message message-personal";
+        msg.innerHTML = `<img src="${imgUrl}" alt="Uploaded" class="chat-image">`;
+        messagesContent.appendChild(msg);
+
+        messagesContent.scrollTop = messagesContent.scrollHeight;
+      } else {
+        alert("Upload failed: " + data.message);
+      }
+    } catch (err) {
+      console.error("Upload error", err);
+      alert("Error uploading image.");
+    }
+
+    // Reset input
+    imageInput.value = "";
   });
 });

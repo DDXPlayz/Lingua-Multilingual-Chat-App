@@ -195,3 +195,11 @@
     50% { transform: scale(1.12); }
     100% { transform: scale(1); }
   }
+
+  .chat-image {
+    max-width: 200px;
+    border-radius: 10px;
+    margin-top: 5px;
+    display: block;
+  }
+  
