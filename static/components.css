@@ -1,0 +1,45 @@
+/* Logout & Buttons */
+.logoutbtn {
+    font-size: 17px;
+    text-decoration: none;
+    padding: 1em 2.5em;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6em;
+    transition: all 0.2s;
+    border: none;
+    color: black;
+    background-color: white;
+    position: absolute;
+    bottom: 5%;
+    right: 3%;
+    z-index: 10;
+    opacity: 0.8;
+  }
+  
+  .logoutbtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .logoutbtn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+  }
+
+
+  /* Scrollbar Styles */
+.mCSB_scrollTools {
+    margin: 1px -3px 1px 0;
+    opacity: 0;
+  }
+  
+  .mCSB_inside > .mCSB_container {
+    margin-right: 0px;
+    padding: 0 10px;
+  }
+  
+  .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }

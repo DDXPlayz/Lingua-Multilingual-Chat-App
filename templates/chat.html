@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Chat</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <!-- <link rel="stylesheet" href="/static/style.css"> -->
   <link rel="stylesheet" href="/static/Dropdown.css">
+  <link rel="stylesheet" href="/static/background.css">
+  <link rel="stylesheet" href="/static/components.css">
+  <link rel="stylesheet" href="/static/chat.css">
   <script src="/static/chat.js" defer></script>
 </head>
 <body>
@@ -24,7 +27,9 @@
     </filter>
   </svg>
 
-  <button class="logoutbtn" id="logout-btn">Logout</button>
+  <button class="logoutbtn" id="logout-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" height='35' width="35" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M352 64C352 46.3 337.7 32 320 32C302.3 32 288 46.3 288 64L288 320C288 337.7 302.3 352 320 352C337.7 352 352 337.7 352 320L352 64zM210.3 162.4C224.8 152.3 228.3 132.3 218.2 117.8C208.1 103.3 188.1 99.8 173.6 109.9C107.4 156.1 64 233 64 320C64 461.4 178.6 576 320 576C461.4 576 576 461.4 576 320C576 233 532.6 156.1 466.3 109.9C451.8 99.8 431.9 103.3 421.7 117.8C411.5 132.3 415.1 152.2 429.6 162.4C479.4 197.2 511.9 254.8 511.9 320C511.9 426 425.9 512 319.9 512C213.9 512 128 426 128 320C128 254.8 160.5 197.1 210.3 162.4z"/></svg>
+  </button>
 
   <div class="dropdown">
     
@@ -45,16 +50,49 @@
     </ul>
   </div>
 
-
-
     <div id="chatbox" class="chat">
       <div class="chat-title"></div>
-      <div class="messages">
-        <div class="messages-content"></div>
-      </div>
-      <div class="message-box">
-        <textarea type="text" class="message-input" id="message" placeholder="Type message..."></textarea>
-        <button type="button" class="message-submit">Send</button>
+        <div class="messages">
+          <div class="messages-content"></div>
+        </div>
+
+        <div class="message-box">
+          <!-- Text input -->
+          <textarea type="text" class="message-input" id="message" placeholder="Type message..."></textarea>
+        
+          <!-- Buttons side by side -->
+          <div class="button-group">
+            <!-- Send button -->
+            <button type="button" class="message-submit" id="send-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <path d="M568.4 37.7C578.2 34.2 589 36.7 596.4 44C603.8 51.3 606.2 62.2 602.7 72L424.7 568.9C419.7 582.8 406.6 592 391.9 592C377.7 592 364.9 583.4 359.6 570.3L295.4 412.3C290.9 401.3 292.9 388.7 300.6 379.7L395.1 267.3C400.2 261.2 399.8 252.3 394.2 246.7C388.6 241.1 379.6 240.7 373.6 245.8L261.2 340.1C252.1 347.7 239.6 349.7 228.6 345.3L70.1 280.8C57 275.5 48.4 262.7 48.4 248.5C48.4 233.8 57.6 220.7 71.5 215.7L568.4 37.7z"/>
+              </svg>
+            </button>
+        
+            <!-- Upload button -->
+            <button type="button" class="message-submit" id="upload-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+        
+            <!-- Mic / Stop button -->
+            <button type="button" class="message-submit" id="record-btn">
+              <!-- Mic icon -->
+              <svg class="mic-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7 6a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v5a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4V6Z"/>
+                <path fill-rule="evenodd" d="M5 8a1 1 0 0 1 1 1v3a4.006 4.006 0 0 0 4 4h4a4.006 4.006 0 0 0 4-4V9a1 1 0 1 1 2 0v3.001A6.006 6.006 0 0 1 14.001 18H13v2h2a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h2v-2H9.999A6.006 6.006 0 0 1 4 12.001V9a1 1 0 0 1 1-1Z" clip-rule="evenodd"/>
+              </svg>
+        
+              <!-- Stop icon -->
+              <svg class="stop-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <rect x="6" y="6" width="12" height="12" rx="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+
       </div>
     </div>
 
@@ -76,6 +114,13 @@
               alert('Error logging out. Try again.');
           }
       });
+  </script>
+  <script>
+    const recordBtn = document.getElementById("record-btn");
+  
+    recordBtn.addEventListener("click", () => {
+      recordBtn.classList.toggle("recording");
+    });
   </script>
   
 </body>

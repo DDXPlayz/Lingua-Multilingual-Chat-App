@@ -439,3 +439,194 @@ input[type="submit"] {
   opacity: 1;
 }
 
+/* --------------------
+ Message Box Layout
+-------------------- */
+.message-box {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* spacing between elements */
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Input expands to fill remaining space */
+.message-box .message-input {
+  flex: 1;
+  min-height: 35px;
+  max-height: 120px;
+  resize: none;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+/* All buttons styled equally */
+.message-box .message-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #248A52;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.message-box .message-submit:hover {
+  background: #1D7745;
+  transform: scale(1.05);
+}
+
+.message-box .message-submit svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+  fill: none;
+  pointer-events: none;
+}
+
+/* Mic toggle */
+.message-box .mic-icon { display: inline; }
+.message-box .stop-icon { display: none; }
+
+.message-box .message-submit.recording .mic-icon { display: none; }
+.message-box .message-submit.recording .stop-icon { display: inline; }
+
+/* Active recording button pulse effect */
+.message-box .message-submit.recording {
+  background: #e63946; /* red */
+  animation: pulse 1.2s infinite;
+}
+
+.message-box .message-submit.recording:hover {
+  background: #8a1620; /* red */
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+/* Button group layout */
+.message-box .button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between buttons */
+}
+
+/* Ensure buttons inside button-group keep their style */
+.message-box .button-group .message-submit {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #248A52;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.message-box .button-group .message-submit:hover {
+  background: #1D7745;
+  transform: scale(1.05);
+}
+
+/* Mic / Stop toggle */
+.message-box .mic-icon {
+  display: inline;
+}
+
+.message-box .stop-icon {
+  display: none;
+}
+
+.message-box .message-submit.recording .mic-icon {
+  display: none;
+}
+
+.message-box .message-submit.recording .stop-icon {
+  display: inline;
+}
+
+/* Make sure textarea expands but buttons stay inline */
+.message-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-box .message-input {
+  flex: 1; /* textarea takes all remaining space */
+  min-height: 35px;
+  max-height: 120px;
+  resize: none;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.message-box {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between input and buttons */
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-box .message-input {
+  flex: 1; /* textarea takes remaining space */
+  min-height: 35px;
+  max-height: 120px;
+  resize: none;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.message-box .button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between buttons */
+}
+
+.message-box .button-group .message-submit {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #248A52;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.message-box .button-group .message-submit:hover {
+  background: #1D7745;
+  transform: scale(1.05);
+}
+
+/* Mic / Stop toggle */
+.message-box .mic-icon { display: inline; }
+.message-box .stop-icon { display: none; }
+.message-box .message-submit.recording .mic-icon { display: none; }
+.message-box .message-submit.recording .stop-icon { display: inline; }
+.message-box .message-submit.recording { background: #e63946; animation: pulse 1.2s infinite; }
