@@ -39,43 +39,44 @@ if (!lang) {
 // Ensure lowercase for matching, but keep display original
 const usernameClean = username.trim().toLowerCase();
 
+let renderedMessages = new Set(); // store message IDs or timestamps
+
 async function loadMessages() {
   const res = await fetch(`/messages?lang=${lang}&user=${username}`);
   const data = await res.json();
 
   const chatbox = document.querySelector(".messages-content");
-  chatbox.innerHTML = "";
 
   data.messages.forEach(msg => {
+    // Use a unique key for each message: timestamp + sender
+    const msgKey = msg.timestamp + "_" + msg.from;
+
+    if (renderedMessages.has(msgKey)) return; // already displayed
+    renderedMessages.add(msgKey);
+
     const senderClean = msg.from.trim().toLowerCase();
     const isPersonal = senderClean === usernameClean;
-  
+
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("message");
     if (isPersonal) msgDiv.classList.add("message-personal");
     msgDiv.classList.add("new");
-  
-    const displayName = msg.from.charAt(0).toUpperCase() + msg.from.slice(1);
-  
-    if (msg.msg_type === "image") {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <br><img src="${msg.content}" alt="Uploaded" class="chat-image">`;
-    } else {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
-    }
-  
-    chatbox.appendChild(msgDiv);
-  });
-  
-  const isNearBottom = chatbox.scrollHeight - chatbox.scrollTop <= chatbox.clientHeight + 100;
 
-  // Always scroll on first load
-  if (firstLoad || isNearBottom) {
-    chatbox.scrollTop = chatbox.scrollHeight;
-    firstLoad = false;
-  }
-  
-  
+    const displayName = msg.from.charAt(0).toUpperCase() + msg.from.slice(1);
+
+    if (msg.msg_type === "text") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
+    } else if (msg.msg_type === "image") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <br><img src="${msg.content}" class="chat-image">`;
+    } else if (msg.msg_type === "audio") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <audio controls src="${msg.content}" class="chat-audio"></audio>`;
+    }
+
+    chatbox.appendChild(msgDiv);
+    chatbox.scrollTop = chatbox.scrollHeight; // scroll only when new message added
+  });
 }
+
 
 async function sendMessage() {
   const messageBox = document.getElementById("message");
@@ -209,13 +210,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.status === "ok") {
         const imgUrl = data.url;
 
-        // Display image in chat
-        const msg = document.createElement("div");
-        msg.className = "message message-personal";
-        msg.innerHTML = `<img src="${imgUrl}" alt="Uploaded" class="chat-image">`;
-        messagesContent.appendChild(msg);
+        loadMessages();
 
-        messagesContent.scrollTop = messagesContent.scrollHeight;
+        
       } else {
         alert("Upload failed: " + data.message);
       }
@@ -228,3 +225,99 @@ document.addEventListener("DOMContentLoaded", () => {
     imageInput.value = "";
   });
 });
+
+  const recordBtn = document.getElementById("record-btn");
+  const micIcon = recordBtn.querySelector(".mic-icon");
+  const stopIcon = recordBtn.querySelector(".stop-icon");
+
+  let mediaRecorder;
+  let audioChunks = [];
+  
+
+  recordBtn.addEventListener("click", async () => {
+    if (!recordBtn.classList.contains("recording")) {
+      // Start recording
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+          audioChunks = [];
+        
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "recording.webm");
+        
+          try {
+            const response = await fetch("/upload_audio", { method: "POST", body: formData });
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            const data = await response.json();
+          
+            if (data.status === "ok") {
+              // Add to renderedMessages to prevent duplicates
+              const msgKey = Date.now() + "_you_audio"; // temporary key
+              if (!renderedMessages.has(msgKey)) {
+                renderedMessages.add(msgKey);
+                const msgDiv = document.createElement("div");
+                msgDiv.className = "message message-personal";
+                msgDiv.innerHTML = `<audio controls src="${data.url}" class="chat-audio"></audio>`;
+                messagesContent.appendChild(msgDiv);
+                messagesContent.scrollTop = messagesContent.scrollHeight;
+              }
+            } else {
+              console.warn("Audio upload failed:", data.message);
+            }
+          } catch (err) {
+            console.warn("Audio upload warning (non-fatal):", err);
+          }
+          
+        
+        };
+        
+
+        mediaRecorder.start();
+        recordBtn.classList.add("recording");
+        micIcon.style.display = "none";
+        stopIcon.style.display = "block";
+      } catch (err) {
+        console.error("Microphone access denied:", err);
+      }
+    } else {
+      // Stop recording
+      mediaRecorder.stop();
+      recordBtn.classList.remove("recording");
+      micIcon.style.display = "block";
+      stopIcon.style.display = "none";
+    }
+  });
+
+  data.messages.forEach(msg => {
+    const senderClean = msg.from.trim().toLowerCase();
+    const isPersonal = senderClean === usernameClean;
+  
+    const msgDiv = document.createElement("div");
+    msgDiv.classList.add("message");
+    if (isPersonal) msgDiv.classList.add("message-personal");
+    msgDiv.classList.add("new");
+  
+    const displayName = msg.from.charAt(0).toUpperCase() + msg.from.slice(1);
+  
+    if (msg.msg_type === "text") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
+    } else if (msg.msg_type === "image") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <img src="${msg.content}" class="chat-image">`;
+    } else if (msg.msg_type === "audio") {
+      msgDiv.innerHTML = `<b>${displayName}</b>: <audio controls src="${msg.content}"></audio>`;
+    }
+  
+    chatbox.appendChild(msgDiv);
+  });
+  
+  
+

@@ -260,6 +260,32 @@ def upload_image():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route("/upload_audio", methods=["POST"])
+def upload_audio():
+    try:
+        if "audio" not in request.files:
+            return jsonify({"status": "error", "message": "No file"}), 400
+        
+        file = request.files["audio"]
+        if file.filename == "":
+            return jsonify({"status": "error", "message": "Empty filename"}), 400
+
+        username = session.get("username") or request.form.get("username", "Anonymous")
+
+        filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(filepath)
+
+        # Save audio URL in DB
+        audio_url = f"/uploads/{filename}"
+        save_message(username, audio_url, "audio")
+
+        return jsonify({"status": "ok", "url": audio_url})
+
+    except Exception as e:
+        logger.error(f"Error in upload_audio: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 # ------------------- RUN APP -------------------

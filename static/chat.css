@@ -203,3 +203,8 @@
     display: block;
   }
   
+  .chat-audio {
+    margin-top: 5px;
+    width: 200px;
+  }
+  
