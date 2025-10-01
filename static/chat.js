@@ -4,33 +4,6 @@ let lang = localStorage.getItem("language");
 let firstLoad = true;
 
 
-document.addEventListener('DOMContentLoaded', function () {
-  const welcomeScreen = document.getElementById("welcome-screen");
-  const username = localStorage.getItem("username");
-
-  if (!username) {
-    welcomeScreen.style.display = "flex";
-  } else {
-    welcomeScreen.style.display = "none";
-    document.getElementById("username-display").textContent = username;
-  }
-
-  document.getElementById("nameSubmit").addEventListener("click", () => {
-    const input = document.getElementById("nameInput").value.trim();
-    if (input) {
-      localStorage.setItem("username", input);
-      location.reload(); // this reloads the page after storing the name
-    }
-  });
-
-  document.getElementById("nameInput").addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      document.getElementById("nameSubmit").click();
-    }
-  });
-});
-
-
 if (!lang) {
   lang = "en"; // fallback default
   localStorage.setItem("language", lang);
@@ -69,8 +42,74 @@ async function loadMessages() {
     } else if (msg.msg_type === "image") {
       msgDiv.innerHTML = `<b>${displayName}</b>: <br><img src="${msg.content}" class="chat-image">`;
     } else if (msg.msg_type === "audio") {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <audio controls src="${msg.content}" class="chat-audio"></audio>`;
+      const bubble = document.createElement("div");
+      bubble.classList.add("chat-audio-bubble");
+      if (!isPersonal) bubble.classList.add("other");
+    
+      bubble.innerHTML = `
+        <button class="audio-play-btn">
+          <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg class="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+            <path d="M6 19h4V5H6zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+        <div class="audio-progress"><div class="audio-progress-bar"></div></div>
+        <div class="audio-time">0:00</div>
+      `;
+    
+      const audio = new Audio(msg.content);
+      const playBtn = bubble.querySelector(".audio-play-btn");
+      const playIcon = bubble.querySelector(".play-icon");
+      const pauseIcon = bubble.querySelector(".pause-icon");
+      const progressBar = bubble.querySelector(".audio-progress-bar");
+      const timeDisplay = bubble.querySelector(".audio-time");
+    
+      function formatTime(sec) {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+    
+      audio.addEventListener("loadedmetadata", () => {
+        timeDisplay.textContent = formatTime(audio.duration);
+      });
+    
+      audio.addEventListener("timeupdate", () => {
+        if (!isNaN(audio.duration) && audio.duration > 0) {
+          const percent = (audio.currentTime / audio.duration) * 100;
+          progressBar.style.width = percent + "%";
+          timeDisplay.textContent = formatTime(audio.currentTime);
+        }
+      });
+    
+      audio.addEventListener("ended", () => {
+        playIcon.style.display = "block";
+        pauseIcon.style.display = "none";
+        progressBar.style.width = "0%";
+        timeDisplay.textContent = formatTime(audio.duration);
+      });
+    
+      playBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play();
+          playIcon.style.display = "none";
+          pauseIcon.style.display = "block";
+        } else {
+          audio.pause();
+          playIcon.style.display = "block";
+          pauseIcon.style.display = "none";
+        }
+      });
+    
+      msgDiv.innerHTML = `<b>${displayName}</b>:`;
+      msgDiv.appendChild(bubble);
     }
+    
+    
+    
+    
 
     chatbox.appendChild(msgDiv);
     chatbox.scrollTop = chatbox.scrollHeight; // scroll only when new message added
@@ -149,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let username = localStorage.getItem('username');
   
-  document.getElementById('username-display').textContent = username;
+  document.getElementById('username-display').textContent = username.toUpperCase();
 
   const lang = localStorage.getItem('language') || 'en';
   const langOptions = document.querySelectorAll('#language-options li');
@@ -297,27 +336,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  data.messages.forEach(msg => {
-    const senderClean = msg.from.trim().toLowerCase();
-    const isPersonal = senderClean === usernameClean;
-  
-    const msgDiv = document.createElement("div");
-    msgDiv.classList.add("message");
-    if (isPersonal) msgDiv.classList.add("message-personal");
-    msgDiv.classList.add("new");
-  
-    const displayName = msg.from.charAt(0).toUpperCase() + msg.from.slice(1);
-  
-    if (msg.msg_type === "text") {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <i>${msg.content}</i>`;
-    } else if (msg.msg_type === "image") {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <img src="${msg.content}" class="chat-image">`;
-    } else if (msg.msg_type === "audio") {
-      msgDiv.innerHTML = `<b>${displayName}</b>: <audio controls src="${msg.content}"></audio>`;
-    }
-  
-    chatbox.appendChild(msgDiv);
-  });
-  
-  
-
+ 
